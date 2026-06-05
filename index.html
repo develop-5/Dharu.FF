@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gamer Portfolio | Free Fire Edition</title>
+    <style>
+        :root {
+            --bg-color: #0b0c10;
+            --card-bg: rgba(31, 40, 51, 0.85); /* Semi-transparent card backings */
+            --primary-orange: #ff4a00;
+            --ff-yellow: #ffb703;
+            --text-light: #ffffff;
+            --text-muted: #c5a880;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* ==========================================
+           🗺️ GLOBAL BERMUDA MAP BACKGROUND
+        ========================================== */
+        body {
+            color: var(--text-light);
+            overflow-x: hidden;
+            /* Dark gradient overlay keeps text highly legible while keeping the map visible */
+            background: linear-gradient(
+                rgba(11, 12, 16, 0.92), 
+                rgba(11, 12, 16, 0.85), 
+                rgba(5, 6, 8, 0.98)
+            ), 
+            url('https://cdn-www.bluestacks.com/bs-images/FFBermuda_EN_2.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        /* ==========================================
+           ⏳ LOADING SCREEN
+        ========================================== */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #050608;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loader-logo {
+            font-size: 3rem;
+            font-weight: 900;
+            color: white;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            animation: pulseGlow 1.5s infinite alternate;
+        }
+
+        .loader-logo span { color: var(--primary-orange); }
+
+        .progress-container {
+            width: 300px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(to right, var(--primary-orange), var(--ff-yellow));
+            box-shadow: 0 0 15px var(--primary-orange);
+            transition: width 0.1s linear;
+        }
+
+        .loading-text {
+            margin-top: 15px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        @keyframes pulseGlow {
+            0% { text-shadow: 0 0 10px rgba(255, 74, 0, 0.2); }
+            100% { text-shadow: 0 0 25px rgba(255, 74, 0, 0.8); }
+        }
+
+        .hidden-content {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .show-content { opacity: 1; transform: translateY(0); }
+
+        /* ==========================================
+           NAV & HERO LAYOUT
+        ========================================== */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background-color: rgba(11, 12, 16, 0.95);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--primary-orange);
+        }
+
+        nav .logo {
+            font-size: 24px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary-orange);
+            text-shadow: 0 0 10px rgba(255, 74, 0, 0.6);
+        }
+
+        nav ul { display: flex; list-style: none; }
+        nav ul li { margin-left: 20px; }
+        nav ul li a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+        nav ul li a:hover { color: var(--ff-yellow); }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.1)), url('https://wallpaperaccess.com/full/9532142.jpg') no-repeat center center/cover;
+            border-bottom: 1px solid rgba(255, 74, 0, 0.2);
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--primary-orange), var(--ff-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--primary-orange);
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 4px;
+            box-shadow: 0 0 15px rgba(255, 74, 0, 0.4);
+            transition: 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--ff-yellow);
+            color: #000;
+            box-shadow: 0 0 20px var(--ff-yellow);
+            transform: translateY(-3px);
+        }
+
+        section { padding: 120px 8% 80px; }
+        
+        .section-title {
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--text-light);
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: var(--primary-orange);
+            margin: 10px auto 0;
+        }
+
+        /* ==========================================
+           🛡️ GAMER DETAILS PROFILE SECTION
+        ========================================== */
+        .profile-container {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 74, 0, 0.2);
+            border-radius: 8px;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .profile-bio h3 {
+            font-size: 1.8rem;
+            color: var(--ff-yellow);
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .profile-bio p {
+            color: #e0e0e0;
+            line-height: 1.6;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .spec-list {
+            list-style: none;
+        }
+
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
+        }
+
+        .spec-label {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .spec-value {
+            color: #fff;
+            font-weight: 700;
+        }
+
+        /* STATS GRID */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(5px);
+            padding: 30px;
+            text-align: center;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-left: 4px solid var(--primary-orange);
+            transition: 0.3s;
+        }
+
+        .stat-card:hover { transform: scale(1.05); border-left-color: var(--ff-yellow); }
+        .stat-card h3 { font-size: 2.5rem; color: var(--ff-yellow); margin-bottom: 5px; }
+        .stat-card p { text-transform: uppercase; color: var(--text-muted); font-size: 0.9rem; letter-spacing: 1px; }
+
+        /* BERMUDA INTEL TEXT ROW STYLE */
+        .map-details {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(5px);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 74, 0, 0.2);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .map-details h3 {
+            font-size: 2rem;
+            color: var(--ff-yellow);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .zone-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .zone-name { font-weight: 600; text-transform: uppercase; font-size: 0.9rem; }
+        .zone-val { color: var(--primary-orange); font-weight: 700; }
+
+        .tactical-note {
+            margin-top: 25px;
+            background-color: rgba(11, 12, 16, 0.7);
+            padding: 15px 20px;
+            border-left: 4px solid var(--ff-yellow);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* 🎥 LOCAL VIDEO GRID STYLES */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .video-card {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(5px);
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid rgba(46, 60, 78, 0.6);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .video-card:hover {
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 15px rgba(255, 74, 0, 0.3);
+        }
+
+        .video-container {
+            width: 100%;
+            background-color: #000;
+            aspect-ratio: 16 / 9;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .video-card h3 { 
+            padding: 15px; 
+            font-size: 1.1rem; 
+            text-transform: uppercase;
+            color: #f5f5f5;
+        }
+
+        footer {
+            background-color: #050608;
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 74, 0, 0.2);
+        }
+
+        .footer-btn { margin-bottom: 25px; }
+        footer p { color: var(--text-muted); font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+
+    <!-- ⏳ LOADING SCREEN -->
+    <div id="loading-screen">
+        <div class="loader-logo">FREE<span>FIRE</span></div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="loading-text" id="loading-text">Connecting to Server... 0%</div>
+    </div>
+
+    <!-- MAIN WRAPPER -->
+    <div id="main-content" class="hidden-content">
+        <nav>
+            <div class="logo">Dharu FF</div>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#profile">Profile</a></li>
+                <li><a href="#stats">Stats</a></li>
+                <li><a href="#map-intel">Bermuda Intel</a></li>
+                <li><a href="#clips">Clips</a></li>
+                <li><a href="contact.html" style="color: var(--primary-orange);">Contact Me</a></li>
+            </ul>
+        </nav>
+
+        <!-- Home Hero -->
+        <section id="home" class="hero">
+            <h1>Dharu GAMER</h1>
+            <p>Grandmaster Tier | Professional Free Fire Rusher</p>
+            <a href="#clips" class="btn">Watch Highlights</a>
+        </section>
+
+        <!-- 🛡️ Gamer Profile Details Section -->
+        <section id="profile">
+            <h2 class="section-title">Combat Profile</h2>
+            <div class="profile-container">
+                <div class="profile-bio">
+                    <h3>Tactical Intel</h3>
+                    <p>An aggressive competitive competitor specializing in high-tier compound combat. Known for executing clean squad wipes through fast reflexes, tight positioning, and high-damage output rotations.</p>
+                    <p>Utilizes a customized high-sensitivity HUD optimized for heavy weapon mechanics, quick drag-headshots, and dynamic defensive wall placement during open battleground rushes.</p>
+                </div>
+                <div>
+                    <ul class="spec-list">
+                        <li class="spec-item">
+                            <span class="spec-label">In-Game Alias</span>
+                            <span class="spec-value" style="color: var(--ff-yellow);">Dharu GAMER</span>
+                        </li>
+                        <li class="spec-item">
+                            <span class="spec-label">Primary Role</span>
+                            <span class="spec-value">Frontline Rusher</span>
+                        </li>
+                        <li class="spec-item">
+                            <span class="spec-label">Signature Weapon</span>
+                            <span class="spec-value">M1887 / Desert Eagle</span>
+                        </li>
+                        <li class="spec-item">
+                            <span class="spec-label">Control Config</span>
+                            <span class="spec-value">Custom HUD Rotation</span>
+                        </li>
+                        <li class="spec-item">
+                            <span class="spec-label">Device Spec</span>
+                            <span class="spec-value">Pro Mobile Flagship</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats -->
+        <section id="stats">
+            <h2 class="section-title">Battle Royale Stats</h2>
+            <div class="stats-container">
+                <div class="stat-card"><h3>85%</h3><p>Headshot Rate</p></div>
+                <div class="stat-card"><h3>5.24</h3><p>K/D Ratio</p></div>
+                <div class="stat-card"><h3>800+</h3><p>Wins</p></div>
+                <div class="stat-card"><h3>Master</h3><p>Current Rank</p></div>
+            </div>
+        </section>
+
+        <!-- Bermuda Intel Overlay Panel -->
+        <section id="map-intel">
+            <h2 class="section-title">Bermuda Combat Intel</h2>
+            <div class="map-details">
+                <h3>Drop Zone Analytics</h3>
+                <p style="color: var(--text-muted); text-align: center; margin-bottom: 20px; font-size: 0.95rem;">
+                    Active strategy maps processing live landing data patterns underneath.
+                </p>
+                
+                <div class="zone-row">
+                    <span class="zone-name">📍 Primary Hot Drop</span>
+                    <span class="zone-val">Peak / Factory</span>
+                </div>
+                <div class="zone-row">
+                    <span class="zone-name">🎯 Loot Priority Zone</span>
+                    <span class="zone-val">Mill & Shipyard</span>
+                </div>
+                <div class="zone-row">
+                    <span class="zone-name">🛡️ Survival Strategy</span>
+                    <span class="zone-val">Edge-rotation via Rim Nam</span>
+                </div>
+                <div class="zone-row">
+                    <span class="zone-name">⚡ Avg. Match Duration</span>
+                    <span class="zone-val">14.5 Minutes</span>
+                </div>
+
+                <div class="tactical-note">
+                    <strong>TACTICAL EVALUATION:</strong> Background scan layout traces standard Bermuda contours. Playstyle isolates early gunfights inside key drop sectors before initiating quick vehicular zone rotations.
+                </div>
+            </div>
+        </section>
+
+        <!-- Video Clips Showcase -->
+        <section id="clips">
+            <h2 class="section-title">Best Clutches & Gameplay</h2>
+            <div class="gallery-grid">
+                <div class="video-card">
+                    <div class="video-container">
+                        <video controls preload="metadata">
+                            <source src="videos/clutch1.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <h3>1v4 Squad Wipe in Factory</h3>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-container">
+                        <video controls preload="metadata">
+                            <source src="videos/awm_montage.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <h3>AWM Headshot Montage</h3>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-container">
+                        <video controls preload="metadata">
+                            <source src="videos/finals.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <h3>Tournament Finals Highlights</h3>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-btn">
+                <a href="contact.html" class="btn">Recruit Me / Sponsor Me</a>
+            </div>
+            <p>Free Fire UID: 1234567890 | Designed for Free Fire Esports Competitors</p>
+        </footer>
+    </div>
+
+    <!-- 📜 JAVASCRIPT CONTROLLER -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const progressBar = document.getElementById('progress-bar');
+            const loadingText = document.getElementById('loading-text');
+            const loadingScreen = document.getElementById('loading-screen');
+            const mainContent = document.getElementById('main-content');
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 15) + 5;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    
+                    setTimeout(() => {
+                        loadingScreen.style.opacity = '0';
+                        loadingScreen.style.visibility = 'hidden';
+                        mainContent.classList.add('show-content');
+                    }, 400);
+                }
+                progressBar.style.width = progress + '%';
+                loadingText.innerText = `Loading Map Data... ${progress}%`;
+            }, 100);
+        });
+    </script>
+</body>
+</html>
